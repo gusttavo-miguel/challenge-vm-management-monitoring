@@ -24,12 +24,12 @@ public class UserController {
     PasswordEncoder passwordEncoder;
 
     @PostMapping("/create")
-    public MessageDTO createUser (@Valid @RequestBody UserDTO userDTO) {
+    public MessageDTO createUser(@Valid @RequestBody UserDTO userDTO) {
 
-        UserEntity userEntity  = new UserEntity(userDTO.email(), userDTO.password());
+        UserEntity userEntity = new UserEntity(userDTO.email(), userDTO.password());
         UserEntity user = userRepository.findByEmail(userEntity.getEmail());
 
-        if (user == null){
+        if (user == null) {
             userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
             userRepository.save(userEntity);
             return new MessageDTO("Usuário com e-mail " + userEntity.getEmail() + " criado com sucesso!");
@@ -37,6 +37,24 @@ public class UserController {
 
         return new MessageDTO("Usuário com e-mail " + userEntity.getEmail() + " já está cadastrado!");
     }
+
+    //    @PostMapping("/update-password")
+    @PutMapping("/update-password")
+    public MessageDTO updatePassword(@RequestBody UserDTO userDTO) {
+
+        UserEntity userEntity = userRepository.findByEmail(userDTO.email());
+        UserEntity user = userRepository.findByEmail(userEntity.getEmail());
+
+        if (user != null) {
+            userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+            userRepository.save(userEntity);
+            return new MessageDTO("Senha atualizada com sucesso!");
+        }
+
+        return new MessageDTO("Usuário não encontrado.");
+
+    }
+
 
     @GetMapping("/all")
     public List<UserEntity> getAllUsers() {
