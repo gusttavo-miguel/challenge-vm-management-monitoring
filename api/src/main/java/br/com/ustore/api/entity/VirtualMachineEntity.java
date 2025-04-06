@@ -7,30 +7,33 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "virtual_machine")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserEntity {
+public class VirtualMachineEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "O e-mail é obrigatório!")
-    @Email(message = "Formato de e-mail inválido!")
+    @NotBlank(message = "O nome é obrigatório!")
+    @Length(min = 5)
     @Column(nullable = false, unique = true)
-    private String email;
+    private String name;
 
-    @NotBlank(message = "A senha é obrigatória!")
+    @NotBlank(message = "A memória é obrigatória!")
     @Column(nullable = false)
-    private String password;
+    private long memory;
 
-    public UserEntity(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
+    @NotBlank(message = "O tamanho da CPU é obrigatório!")
+    @Column(nullable = false)
+    private long lengthCPU;
+
+    @Column(nullable = false)
+    private String status;
 }

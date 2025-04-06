@@ -1,0 +1,13 @@
+package br.com.ustore.api.controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/VM")
+public class VirtualMachineController {
+
+
+
+
+}

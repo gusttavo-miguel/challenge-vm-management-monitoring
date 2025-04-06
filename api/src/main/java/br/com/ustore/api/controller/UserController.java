@@ -38,7 +38,6 @@ public class UserController {
         return new MessageDTO("Usuário com e-mail " + userEntity.getEmail() + " já está cadastrado!");
     }
 
-    //    @PostMapping("/update-password")
     @PutMapping("/update-password")
     public MessageDTO updatePassword(@RequestBody UserDTO userDTO) {
 
