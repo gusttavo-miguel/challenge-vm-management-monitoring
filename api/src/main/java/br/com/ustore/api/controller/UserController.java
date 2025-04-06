@@ -1,6 +1,6 @@
 package br.com.ustore.api.controller;
 
-import br.com.ustore.api.entity.UserModel;
+import br.com.ustore.api.entity.UserEntity;
 import br.com.ustore.api.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +22,14 @@ public class UserController {
     PasswordEncoder passwordEncoder;
 
     @PostMapping("/create")
-    public String createUser (@Valid @RequestBody UserModel userModel) {
-        userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
-        userRepository.save(userModel);
-        return "Usuário com e-mail " + userModel.getEmail() + " criado com sucesso!";
+    public String createUser (@Valid @RequestBody UserEntity userEntity) {
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        userRepository.save(userEntity);
+        return "Usuário com e-mail " + userEntity.getEmail() + " criado com sucesso!";
     }
 
     @GetMapping("/all")
-    public List<UserModel> getAllUsers() {
+    public List<UserEntity> getAllUsers() {
         return userRepository.findAll();
     }
 
