@@ -1,4 +1,4 @@
-package br.com.ustore.api.model;
+package br.com.ustore.api.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -14,17 +14,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class UserModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "O e-mail é obrigatório")
-    @Email(message = "Formato de e-mail inválido")
+    @NotBlank(message = "O e-mail é obrigatório!")
+    @Email(message = "Formato de e-mail inválido!")
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "A senha é obrigatória!")
     @Column(nullable = false)
     private String password;
 }
