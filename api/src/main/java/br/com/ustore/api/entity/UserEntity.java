@@ -28,4 +28,9 @@ public class UserEntity {
     @NotBlank(message = "A senha é obrigatória!")
     @Column(nullable = false)
     private String password;
+
+    public UserEntity(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }

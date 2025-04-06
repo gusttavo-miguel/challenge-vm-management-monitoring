@@ -1,5 +1,7 @@
 package br.com.ustore.api.controller;
 
+import br.com.ustore.api.dto.MessageDTO;
+import br.com.ustore.api.dto.UserDTO;
 import br.com.ustore.api.entity.UserEntity;
 import br.com.ustore.api.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -22,10 +24,18 @@ public class UserController {
     PasswordEncoder passwordEncoder;
 
     @PostMapping("/create")
-    public String createUser (@Valid @RequestBody UserEntity userEntity) {
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        userRepository.save(userEntity);
-        return "Usuário com e-mail " + userEntity.getEmail() + " criado com sucesso!";
+    public MessageDTO createUser (@Valid @RequestBody UserDTO userDTO) {
+
+        UserEntity userEntity  = new UserEntity(userDTO.email(), userDTO.password());
+        UserEntity user = userRepository.findByEmail(userEntity.getEmail());
+
+        if (user == null){
+            userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+            userRepository.save(userEntity);
+            return new MessageDTO("Usuário com e-mail " + userEntity.getEmail() + " criado com sucesso!");
+        }
+
+        return new MessageDTO("Usuário com e-mail " + userEntity.getEmail() + " já está cadastrado!");
     }
 
     @GetMapping("/all")
@@ -34,8 +44,8 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
+    public MessageDTO deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
-        return "Usuário excluído com sucesso!";
+        return new MessageDTO("Usuário excluído com sucesso!");
     }
 }

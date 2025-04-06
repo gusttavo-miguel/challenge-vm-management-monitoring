@@ -1,7 +1,7 @@
 package br.com.ustore.api.controller;
 
-import br.com.ustore.api.dto.LoginRequest;
-import br.com.ustore.api.dto.LoginResponse;
+import br.com.ustore.api.dto.LoginRequestDTO;
+import br.com.ustore.api.dto.LoginResponseDTO;
 import br.com.ustore.api.entity.UserEntity;
 import br.com.ustore.api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +19,18 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest loginRequest) {
-        UserEntity user = userRepository.findByEmail(loginRequest.email());
+    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO) {
+        UserEntity user = userRepository.findByEmail(loginRequestDTO.email());
 
         if (user == null) {
-            return new LoginResponse("Usuário não encontrado.");
+            return new LoginResponseDTO("Usuário não encontrado.");
         }
 
-        boolean passwordMatches = passwordEncoder.matches(loginRequest.password(), user.getPassword());
+        boolean passwordMatches = passwordEncoder.matches(loginRequestDTO.password(), user.getPassword());
         if (!passwordMatches) {
-            return new LoginResponse("Senha inválida.");
+            return new LoginResponseDTO("Senha inválida.");
         }
 
-        return new LoginResponse("Login realizado com sucesso!");
+        return new LoginResponseDTO("Login realizado com sucesso!");
     }
 }
