@@ -36,4 +36,11 @@ public class VirtualMachineEntity {
 
     @Column(nullable = false)
     private String status;
+
+    public VirtualMachineEntity(String name, long lengthCPU, long memory, String status) {
+        this.name = name;
+        this.lengthCPU = lengthCPU;
+        this.memory = memory;
+        this.status = status;
+    }
 }
