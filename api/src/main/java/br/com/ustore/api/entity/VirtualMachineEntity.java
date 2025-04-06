@@ -22,24 +22,22 @@ public class VirtualMachineEntity {
     private Long id;
 
     @NotBlank(message = "O nome é obrigatório!")
-    @Length(min = 5)
+    @Length(min = 3)
     @Column(nullable = false, unique = true)
-    private String name;
+    private String displayName;
 
-    @NotBlank(message = "A memória é obrigatória!")
     @Column(nullable = false)
     private long memory;
 
-    @NotBlank(message = "O tamanho da CPU é obrigatório!")
     @Column(nullable = false)
-    private long lengthCPU;
+    private long cpu;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String status;
 
-    public VirtualMachineEntity(String name, long lengthCPU, long memory, String status) {
-        this.name = name;
-        this.lengthCPU = lengthCPU;
+    public VirtualMachineEntity(String displayName, long cpu, long memory, String status) {
+        this.displayName = displayName;
+        this.cpu = cpu;
         this.memory = memory;
         this.status = status;
     }

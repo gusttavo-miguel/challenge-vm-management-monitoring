@@ -4,5 +4,5 @@ import br.com.ustore.api.entity.VirtualMachineEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VirtualMachineRepository extends JpaRepository<VirtualMachineEntity, Long> {
-    VirtualMachineEntity findByName(String name);
+    VirtualMachineEntity findByDisplayName(String displayName);
 }

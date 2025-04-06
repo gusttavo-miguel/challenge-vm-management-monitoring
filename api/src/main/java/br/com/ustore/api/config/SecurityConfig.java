@@ -31,8 +31,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // desativa CSRF (necessário para o H2)
                 .headers(headers -> headers.frameOptions(frame -> frame.disable())) // permite uso de <iframe> para o console
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/h2-console/**").permitAll()
-                        .requestMatchers("/user/**").authenticated()
+                        .requestMatchers("/auth/login","/user/create" ,"/h2-console/**").permitAll()
+                        .requestMatchers("/user/update-password","/user/all", "/user/delete/{id}","/VirtualMachine/**").authenticated()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form.disable())
