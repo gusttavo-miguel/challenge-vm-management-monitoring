@@ -2,8 +2,10 @@ package br.com.ustore.api.controller;
 
 import br.com.ustore.api.dto.LoginRequestDTO;
 import br.com.ustore.api.dto.LoginResponseDTO;
+import br.com.ustore.api.dto.MessageDTO;
 import br.com.ustore.api.entity.UserEntity;
 import br.com.ustore.api.repository.UserRepository;
+import br.com.ustore.api.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -18,19 +20,18 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @PostMapping("/login")
-    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO) {
-        UserEntity user = userRepository.findByEmail(loginRequestDTO.email());
+    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginRequest) {
+        UserEntity user = userRepository.findByEmail(loginRequest.email());
 
-        if (user == null) {
-            return new LoginResponseDTO("Usuário não encontrado.");
+        if (user == null || !passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
+            return new LoginResponseDTO("Credenciais inválidas");
         }
 
-        boolean passwordMatches = passwordEncoder.matches(loginRequestDTO.password(), user.getPassword());
-        if (!passwordMatches) {
-            return new LoginResponseDTO("Senha inválida.");
-        }
-
-        return new LoginResponseDTO("Login realizado com sucesso!");
+        String token = jwtUtil.generateToken(user.getEmail());
+        return new LoginResponseDTO(token);
     }
 }
