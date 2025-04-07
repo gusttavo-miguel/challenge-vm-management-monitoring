@@ -1,4 +1,4 @@
 package br.com.ustore.api.dto;
 
-public record VirtualMachineDTO(String displayName, long memory, long cpu, String status) {
+public record VirtualMachineDTO(long id, String displayName, long memory, long cpu, String status) {
 }

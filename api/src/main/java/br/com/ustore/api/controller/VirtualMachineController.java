@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/VirtualMachine")
@@ -36,21 +37,31 @@ public class VirtualMachineController {
     }
 
     @PutMapping("/update")
-    public MessageDTO updateVirtualMachine(@RequestBody VirtualMachineDTO virtualMachineDTO){
+    public MessageDTO updateVirtualMachine(@RequestBody VirtualMachineDTO virtualMachineDTO) {
+        Optional<VirtualMachineEntity> existingVM = virtualMachineRepository.findById(virtualMachineDTO.id());
 
-        VirtualMachineEntity vmEntity = new VirtualMachineEntity(virtualMachineDTO.displayName()
-                ,virtualMachineDTO.cpu()
-                ,virtualMachineDTO.memory()
-                ,virtualMachineDTO.status());
-
-        VirtualMachineEntity vm = virtualMachineRepository.findByDisplayName(vmEntity.getDisplayName());
-        if (vm!=null){
-            virtualMachineRepository.save(vmEntity);
-            return new MessageDTO("Máquina virtual atualizada com sucesso!");
+        if (existingVM.isEmpty()) {
+            return new MessageDTO("Máquina virtual ainda não cadastrada!");
         }
 
-        return new MessageDTO("Máquina virtual ainda não cadastrado!");
+        // Verifica se existe outra VM com o mesmo displayName
+        Optional<VirtualMachineEntity> vmWithSameName = Optional.ofNullable(virtualMachineRepository.findByDisplayName(virtualMachineDTO.displayName()));
+        if (vmWithSameName.isPresent() && !vmWithSameName.get().getId().equals(virtualMachineDTO.id())) {
+            return new MessageDTO("Já existe uma máquina virtual com esse nome!");
+        }
+
+        VirtualMachineEntity vmEntity = new VirtualMachineEntity(
+                virtualMachineDTO.id(),
+                virtualMachineDTO.displayName(),
+                virtualMachineDTO.cpu(),
+                virtualMachineDTO.memory(),
+                virtualMachineDTO.status()
+        );
+
+        virtualMachineRepository.save(vmEntity);
+        return new MessageDTO("Máquina virtual atualizada com sucesso!");
     }
+
 
     @GetMapping("/all")
     public List<VirtualMachineEntity> getAllUsers() {

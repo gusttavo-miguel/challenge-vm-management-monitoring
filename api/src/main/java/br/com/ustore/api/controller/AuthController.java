@@ -27,11 +27,14 @@ public class AuthController {
     public LoginResponseDTO login(@RequestBody LoginRequestDTO loginRequest) {
         UserEntity user = userRepository.findByEmail(loginRequest.email());
 
-        if (user == null || !passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
+        if (user == null) {
+            return new LoginResponseDTO("Usuário não cadastrado!");
+        } else if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             return new LoginResponseDTO("Credenciais inválidas");
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
+
         return new LoginResponseDTO(token);
     }
 }

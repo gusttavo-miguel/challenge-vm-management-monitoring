@@ -32,7 +32,7 @@ public class VirtualMachineEntity {
     @Column(nullable = false)
     private long cpu;
 
-    @Column(nullable = true)
+    @Column(nullable = false, name = "RUNNING")
     private String status;
 
     public VirtualMachineEntity(String displayName, long cpu, long memory, String status) {
